@@ -3,5 +3,15 @@
         "nome": "matheus",
         "email": "matheusllopes22@gmail.com",
         "senha": "1111"
+    },
+    {
+        "nome": "matheus",
+        "email": "email@email.com",
+        "senha": "123"
+    },
+    {
+        "nome": "Matheus",
+        "email": "matheus@email.com",
+        "senha": "123"
     }
 ]
