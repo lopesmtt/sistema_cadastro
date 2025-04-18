@@ -13,5 +13,15 @@
         "nome": "Matheus",
         "email": "matheus@email.com",
         "senha": "123"
+    },
+    {
+        "nome": "Matheus",
+        "email": "matheus22@mail.com",
+        "senha": "233"
+    },
+    {
+        "nome": "Administrador",
+        "email": "admin@admin.com",
+        "senha": "admin123"
     }
 ]

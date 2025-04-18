@@ -1,24 +1,5 @@
 import json
 
-#Funçao para criar login
-def login_usuario():
-        email = input("Digite seu email: ")
-        senha = input("Digite sua senha: ")
-        
-        try:
-             with open("users.json", "r") as arquivo: 
-                 usuarios = json.load(arquivo)
-        except FilleNotFoundError:
-                  print("Nenhum usuario cadastrado ainda")
-                  return
-        for usuario in usuarios:
-            if usuario["e-mail"]== email and usuario["senha"] == senha: 
-                print(f"Bem vindo, {usuario['nome']} ! ")
-                return 
-              
-        print("Email ou senha incorretos")                                               
-
-
 # Função para carregar os usuários do arquivo
 def carregar_usuarios():
     try:
