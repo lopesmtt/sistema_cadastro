@@ -1,5 +1,26 @@
 import json
 
+usuario_logado = None
+
+#Funçao para garantir que o admin esteja cadastrado
+def garantir_admin():
+        usuarios = carregar_usuarios()
+        
+        if not any(user["email"] == "admin@admin.com" for user in usuarios):
+            admin = {
+                "nome": "Administrador",
+                "email": "admin@admin.com",
+                "senha": "admin123"
+            }
+            usuarios.append(admin)
+            
+            salvar_usuarios(usuarios)
+            
+            print("Admin cadastrado com sucesso! ")
+                 
+
+
+
 #Funçao para criar login
 def login_usuario():
         email = input("Digite seu email: ")
@@ -60,10 +81,63 @@ def cadastrar_usuario():
     salvar_usuarios(usuarios)  # Salva a lista atualizada de usuários no arquivo
     print("Usuário cadastrado com sucesso!")
 
+
+#Funçao criar login
+def login_usuario():
+    global usuario_logado
+    email = input("Digite seu e-mail: ").strip()  # .strip() remove espaços extras
+    senha = input("Digite sua senha: ").strip()  # .strip() remove espaços extras
+    
+    usuarios = carregar_usuarios()
+    
+    for usuario in usuarios:
+        if usuario["email"] == email and usuario["senha"] == senha:
+            usuario_logado = usuario
+            print(f"Bem-vindo, {usuario['nome']}\n")
+            return
+    print("Email ou senha incorretos\n")
+
+def menu():
+        while True:
+            print("== Menu == ")
+            print("1.  Cadastrar ")
+            print("2. Login ")
+            print("3. Listar usuario(somente admin)")
+            print ("4. Sair ")
+            opcao = input("Escolha uma opçao: ").strip() 
+            
+            if opcao == "1":
+                  cadastrar_usuario()  
+            elif opcao == "2":
+                  login_usuario()
+            elif opcao == "3":
+                  listar_usuarios()
+            elif opcao == "4":
+                 print("Saindo do sistema... ")
+                 break
+            else:
+                     print("Opçao Invalida.\n")
+                                                                  
+                                             
+#Funçao listar usuarios(somente admins)
+def listar_usuarios():
+    if usuario_logado is None or usuario_logado["email"] != "admin@admin.com":
+        print("Acesso negado. Somente admins podem listar usuários.")
+        return
+    
+    usuarios = carregar_usuarios()
+    print("Lista de usuários:")
+    for usuario in usuarios:
+        print(f"Nome: {usuario['nome']}, Email: {usuario['email']}")    
+                    
+
+
+
+
 # Função principal para o sistema
 def main():
     print("=== Sistema de Cadastro de Usuários ===")
-    cadastrar_usuario()
+    menu()
 
 # Rodando o programa
 if __name__ == "__main__":
