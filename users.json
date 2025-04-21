@@ -23,5 +23,10 @@
         "nome": "Administrador",
         "email": "admin@admin.com",
         "senha": "admin123"
+    },
+    {
+        "nome": "Joao",
+        "email": "joao@333.com",
+        "senha": "333"
     }
 ]

@@ -1,5 +1,6 @@
 import json
-
+from colorama import init, Fore, Style 
+init(autoreset=True)
 usuario_logado = None
 
 #Funçao para garantir que o admin esteja cadastrado
@@ -16,8 +17,31 @@ def garantir_admin():
             
             salvar_usuarios(usuarios)
             
-            print("Admin cadastrado com sucesso! ")
+            print(Fore.YELLOW + "Admin cadastrado com sucesso! ")
                  
+
+#Funçao alteraçao de senha
+def alterar_senha():
+        if usuario_logado is None:
+            print(Fore.RED + "Voce precisa estar logado para alterar a senha. ")
+            return
+        senha_antiga = input("Digite a sua senha antiga: ").strip()
+        if senha_antiga != usuario_logado["senha"]:
+            print(Fore.RED + "Senha antiga incorreta.  ")
+            return
+        nova_senha = input("Digite uma nova senha: ").strip()
+       
+        usuario_logado["senha"] = nova_senha
+        usuarios = carregar_usuarios()
+       
+        for i, usuario in enumerate(usuarios):
+            if usuario["email"] == usuario_logado["email"]:
+                usuarios[i] = usuario_logado
+        salvar_usuarios(usuarios)
+        print(Fore.GREEN + "Senha alterada com sucesso. ")        
+            
+            
+            
 
 
 
@@ -37,7 +61,7 @@ def login_usuario():
                 print(f"Bem vindo, {usuario['nome']} ! ")
                 return 
               
-        print("Email ou senha incorretos")                                               
+        print(Fore.RED + "Email ou senha incorretos")                                               
 
 
 # Função para carregar os usuários do arquivo
@@ -60,14 +84,14 @@ def cadastrar_usuario():
     senha = input("Senha: ").strip()
 
     if not nome or not email or not senha:  # Verifica se algum campo está vazio
-        print("Erro: Nenhum campo pode estar vazio.")
+        print(Fore.RED + "Erro: Nenhum campo pode estar vazio.")
         return
 
     usuarios = carregar_usuarios()
 
     # Verifica se o email já está cadastrado
     if any(user["email"] == email for user in usuarios):
-        print("Erro: Este email já está cadastrado.")
+        print(Fore.RED + "Erro: Este email já está cadastrado.")
         return
 
     novo_usuario = {
@@ -79,7 +103,7 @@ def cadastrar_usuario():
     usuarios.append(novo_usuario)  # Adiciona o novo usuário à lista
 
     salvar_usuarios(usuarios)  # Salva a lista atualizada de usuários no arquivo
-    print("Usuário cadastrado com sucesso!")
+    print(Fore.GREEN + "Usuário cadastrado com sucesso!" + Style.RESET_ALL)
 
 
 #Funçao criar login
@@ -93,9 +117,9 @@ def login_usuario():
     for usuario in usuarios:
         if usuario["email"] == email and usuario["senha"] == senha:
             usuario_logado = usuario
-            print(f"Bem-vindo, {usuario['nome']}\n")
+            print(Fore.BLUE + f"Bem-vindo, {usuario['nome']}\n")
             return
-    print("Email ou senha incorretos\n")
+    print(Fore.RED + "Email ou senha incorretos\n")
 
 def menu():
         while True:
@@ -103,8 +127,10 @@ def menu():
             print("1.  Cadastrar ")
             print("2. Login ")
             print("3. Listar usuario(somente admin)")
-            print ("4. Sair ")
-            opcao = input("Escolha uma opçao: ").strip() 
+            if usuario_logado:
+                print(Fore.MAGENTA + "4. Alterar senha")
+            print ("0. Sair ")
+            opcao = input(Fore.LIGHTCYAN_EX + "Escolha uma opçao: ").strip() 
             
             if opcao == "1":
                   cadastrar_usuario()  
@@ -112,17 +138,19 @@ def menu():
                   login_usuario()
             elif opcao == "3":
                   listar_usuarios()
-            elif opcao == "4":
-                 print("Saindo do sistema... ")
+            elif opcao == "4" and usuario_logado:
+                     alterar_senha( )
+            elif opcao == "0":          
+                 print(Fore.CYAN + "Saindo do sistema... ")
                  break
             else:
-                     print("Opçao Invalida.\n")
+                     print(Fore.RED + "Opçao Invalida.\n")
                                                                   
                                              
 #Funçao listar usuarios(somente admins)
 def listar_usuarios():
     if usuario_logado is None or usuario_logado["email"] != "admin@admin.com":
-        print("Acesso negado. Somente admins podem listar usuários.")
+        print(Fore.RED + "Acesso negado. Somente admins podem listar usuários.")
         return
     
     usuarios = carregar_usuarios()
@@ -137,6 +165,7 @@ def listar_usuarios():
 # Função principal para o sistema
 def main():
     print("=== Sistema de Cadastro de Usuários ===")
+    garantir_admin()
     menu()
 
 # Rodando o programa
