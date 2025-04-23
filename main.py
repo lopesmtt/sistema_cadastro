@@ -1,75 +1,47 @@
 import json
 from colorama import init, Fore, Style 
 init(autoreset=True)
+
+# Variável global que vai manter o usuário logado
 usuario_logado = None
 
-#Funçao para garantir que o admin esteja cadastrado
+# Função para garantir que o admin esteja cadastrado
 def garantir_admin():
-        usuarios = carregar_usuarios()
-        
-        if not any(user["email"] == "admin@admin.com" for user in usuarios):
-            admin = {
-                "nome": "Administrador",
-                "email": "admin@admin.com",
-                "senha": "admin123"
-            }
-            usuarios.append(admin)
-            
-            salvar_usuarios(usuarios)
-            
-            print(Fore.YELLOW + "Admin cadastrado com sucesso! ")
-                 
-
-#Funçao alteraçao de senha
-def alterar_senha():
-        if usuario_logado is None:
-            print(Fore.RED + "Voce precisa estar logado para alterar a senha. ")
-            return
-        senha_antiga = input("Digite a sua senha antiga: ").strip()
-        if senha_antiga != usuario_logado["senha"]:
-            print(Fore.RED + "Senha antiga incorreta.  ")
-            return
-        nova_senha = input("Digite uma nova senha: ").strip()
-       
-        usuario_logado["senha"] = nova_senha
-        usuarios = carregar_usuarios()
-       
-        for i, usuario in enumerate(usuarios):
-            if usuario["email"] == usuario_logado["email"]:
-                usuarios[i] = usuario_logado
+    usuarios = carregar_usuarios()
+    if not any(user["email"] == "admin@admin.com" for user in usuarios):
+        admin = {
+            "nome": "Administrador",
+            "email": "admin@admin.com",
+            "senha": "admin123"
+        }
+        usuarios.append(admin)
         salvar_usuarios(usuarios)
-        print(Fore.GREEN + "Senha alterada com sucesso. ")        
-            
-            
-            
+        print(Fore.YELLOW + "Admin cadastrado com sucesso!")
 
-
-
-#Funçao para criar login
-def login_usuario():
-        email = input("Digite seu email: ")
-        senha = input("Digite sua senha: ")
-        
-        try:
-             with open("users.json", "r") as arquivo: 
-                 usuarios = json.load(arquivo)
-        except FilleNotFoundError:
-                  print("Nenhum usuario cadastrado ainda")
-                  return
-        for usuario in usuarios:
-            if usuario["e-mail"]== email and usuario["senha"] == senha: 
-                print(f"Bem vindo, {usuario['nome']} ! ")
-                return 
-              
-        print(Fore.RED + "Email ou senha incorretos")                                               
-
+# Função de alteração de senha
+def alterar_senha():
+    if usuario_logado is None:
+        print(Fore.RED + "Você precisa estar logado para alterar a senha.")
+        return
+    senha_antiga = input("Digite a sua senha antiga: ").strip()
+    if senha_antiga != usuario_logado["senha"]:
+        print(Fore.RED + "Senha antiga incorreta.")
+        return
+    nova_senha = input("Digite uma nova senha: ").strip()
+    usuario_logado["senha"] = nova_senha
+    usuarios = carregar_usuarios()
+    for i, usuario in enumerate(usuarios):
+        if usuario["email"] == usuario_logado["email"]:
+            usuarios[i] = usuario_logado
+    salvar_usuarios(usuarios)
+    print(Fore.GREEN + "Senha alterada com sucesso.")
 
 # Função para carregar os usuários do arquivo
 def carregar_usuarios():
     try:
-        with open("users.json", "r") as arquivo:  # Corrigido: espaço extra removido
+        with open("users.json", "r") as arquivo:
             return json.load(arquivo)
-    except FileNotFoundError:  # Corrigido: erro de digitação em 'FilleNotFoundError'
+    except FileNotFoundError:
         return []  # Se o arquivo não existir, retorna uma lista vazia
 
 # Função para salvar os usuários no arquivo
@@ -101,16 +73,14 @@ def cadastrar_usuario():
     }
 
     usuarios.append(novo_usuario)  # Adiciona o novo usuário à lista
-
     salvar_usuarios(usuarios)  # Salva a lista atualizada de usuários no arquivo
-    print(Fore.GREEN + "Usuário cadastrado com sucesso!" + Style.RESET_ALL)
+    print(Fore.GREEN + "Usuário cadastrado com sucesso!")
 
-
-#Funçao criar login
+# Função de login
 def login_usuario():
     global usuario_logado
-    email = input("Digite seu e-mail: ").strip()  # .strip() remove espaços extras
-    senha = input("Digite sua senha: ").strip()  # .strip() remove espaços extras
+    email = input("Digite seu e-mail: ").strip()
+    senha = input("Digite sua senha: ").strip()
     
     usuarios = carregar_usuarios()
     
@@ -121,33 +91,29 @@ def login_usuario():
             return
     print(Fore.RED + "Email ou senha incorretos\n")
 
-def menu():
-        while True:
-            print("== Menu == ")
-            print("1.  Cadastrar ")
-            print("2. Login ")
-            print("3. Listar usuario(somente admin)")
-            if usuario_logado:
-                print(Fore.MAGENTA + "4. Alterar senha")
-            print ("0. Sair ")
-            opcao = input(Fore.LIGHTCYAN_EX + "Escolha uma opçao: ").strip() 
-            
-            if opcao == "1":
-                  cadastrar_usuario()  
-            elif opcao == "2":
-                  login_usuario()
-            elif opcao == "3":
-                  listar_usuarios()
-            elif opcao == "4" and usuario_logado:
-                     alterar_senha( )
-            elif opcao == "0":          
-                 print(Fore.CYAN + "Saindo do sistema... ")
-                 break
-            else:
-                     print(Fore.RED + "Opçao Invalida.\n")
-                                                                  
-                                             
-#Funçao listar usuarios(somente admins)
+# Função para remover um usuário
+def remover_usuario():
+    if usuario_logado is None or usuario_logado["email"] != "admin@admin.com":
+        print(Fore.RED + "Acesso negado. Somente admins podem remover usuários.")
+        return
+    
+    email_remover = input("Digite o e-mail do usuário que deseja remover: ").strip()
+    usuarios = carregar_usuarios()
+    
+    usuario_encontrado = False
+    
+    for i, usuario in enumerate(usuarios):
+        if usuario["email"] == email_remover:
+            usuarios.pop(i)  # Remove o usuário da lista
+            salvar_usuarios(usuarios)  # Salva a lista atualizada de usuários
+            print(Fore.GREEN + "Usuário removido com sucesso!")
+            usuario_encontrado = True
+            break
+    
+    if not usuario_encontrado:
+        print(Fore.RED + "Usuário não encontrado.")
+
+# Função para listar usuários (somente admin)
 def listar_usuarios():
     if usuario_logado is None or usuario_logado["email"] != "admin@admin.com":
         print(Fore.RED + "Acesso negado. Somente admins podem listar usuários.")
@@ -157,15 +123,98 @@ def listar_usuarios():
     print("Lista de usuários:")
     for usuario in usuarios:
         print(f"Nome: {usuario['nome']}, Email: {usuario['email']}")    
-                    
 
+def buscar_usuario(users_db, busca):
+    """
+    Função para buscar um usuário no banco de dados.
+    users_db: lista de dicionários com os dados dos usuários.
+    busca: nome ou e-mail para procurar.
+    """
+    resultados = []
+    for usuario in users_db:
+        if busca.lower() in usuario['nome'].lower() or busca.lower() in usuario['email'].lower():
+            resultados.append(usuario)
+    
+    return resultados
 
+usuarios = [     
+    {
+        "nome": "matheus",
+        "email": "matheusllopes22@gmail.com",
+        "senha": "1111"
+    },
+    {
+        "nome": "matheus",
+        "email": "email@email.com",
+        "senha": "123"
+    },
+    {
+        "nome": "Matheus",
+        "email": "matheus@email.com",
+        "senha": "123"
+    },
+    {
+        "nome": "Matheus",
+        "email": "matheus22@mail.com",
+        "senha": "233"
+    },
+    {
+        "nome": "Administrador",
+        "email": "admin@admin.com",
+        "senha": "admin123"
+    },
+    {
+        "nome": "Joao",
+        "email": "joao@333.com",
+        "senha": "333"
+    }
+]
 
+busca = input("Digite o nome ou e-mail para buscar: ")
+usuarios_encontrados = buscar_usuario(usuarios, busca)
+
+if usuarios_encontrados:
+    for usuario in usuarios_encontrados:
+        print(f"Usuário encontrado: {usuario['nome']} - {usuario['email']}")
+else:
+    print("Nenhum usuário encontrado.")
+                                                                                                                                                       
+# Função do menu principal
+def menu():
+    while True:
+        print("== Menu ==")
+        print("1. Cadastrar")
+        print("2. Login")
+        print("3. Listar usuário(somente admin)")
+        if usuario_logado:
+            print(Fore.MAGENTA + "4. Alterar senha")
+            print(Fore.MAGENTA + "5. Remover usuário(Somente admin)")
+        print("0. Sair")
+        opcao = input(Fore.LIGHTCYAN_EX + "Escolha uma opção: ").strip()
+        
+        if opcao == "1":
+            cadastrar_usuario()  
+        elif opcao == "2":
+            login_usuario()
+        elif opcao == "3":
+            listar_usuarios()
+        elif opcao == "4" and usuario_logado:
+            alterar_senha()
+        elif opcao == "5" and usuario_logado:
+            remover_usuario()
+        elif opcao == "6" and usuario_logado:
+                busca = input("Digite um nome ou email para buscar:    ")
+                
+        elif opcao == "0":          
+            print(Fore.CYAN + "Saindo do sistema...")
+            break
+        else:
+            print(Fore.RED + "Opção inválida.\n")
 
 # Função principal para o sistema
 def main():
     print("=== Sistema de Cadastro de Usuários ===")
-    garantir_admin()
+    garantir_admin()  # Garante que o admin está cadastrado
     menu()
 
 # Rodando o programa
