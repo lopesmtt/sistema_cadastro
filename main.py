@@ -113,6 +113,15 @@ def remover_usuario():
     if not usuario_encontrado:
         print(Fore.RED + "Usuário não encontrado.")
 
+# Função para exibir dados do usuário logado
+def exibir_dados_usuario():
+    if usuario_logado is None:
+        print(Fore.RED + "Você precisa estar logado para ver seus dados.")
+    else:
+        print(Fore.GREEN + f"Nome: {usuario_logado['nome']}")
+        print(Fore.GREEN + f"Email: {usuario_logado['email']}")
+
+
 # Função para listar usuários (somente admin)
 def listar_usuarios():
     if usuario_logado is None or usuario_logado["email"] != "admin@admin.com":
@@ -189,6 +198,7 @@ def menu():
         if usuario_logado:
             print(Fore.MAGENTA + "4. Alterar senha")
             print(Fore.MAGENTA + "5. Remover usuário(Somente admin)")
+            print(Fore.MAGENTA+ "6. exibir usuario logado.")
         print("0. Sair")
         opcao = input(Fore.LIGHTCYAN_EX + "Escolha uma opção: ").strip()
         
@@ -203,13 +213,22 @@ def menu():
         elif opcao == "5" and usuario_logado:
             remover_usuario()
         elif opcao == "6" and usuario_logado:
-                busca = input("Digite um nome ou email para buscar:    ")
-                
+                exibir_dados_usuario()
+        elif opcao == "7"  and usuario_logado:
+            busca = input("Digite um nome ou email para buscar: ").strip()
+            usuario_encontrados = buscar_usuario(carregar_usuarios(), busca)
+            
+            if usuarios_encontrados:
+                for usuario in usuarios_encontrados:
+                    print(f"Usuário encontrado: {usuario['nome']} - {usuario['email']}")
+            else:
+                print("Nenhum usuário encontrado.")
         elif opcao == "0":          
             print(Fore.CYAN + "Saindo do sistema...")
             break
         else:
             print(Fore.RED + "Opção inválida.\n")
+     
 
 # Função principal para o sistema
 def main():
