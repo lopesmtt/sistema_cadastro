@@ -12,6 +12,7 @@ Este sistema permite o cadastro de usuários com diferentes permissões. Ele sup
 ## Mudanças Realizadas Hoje
 - Adicionada a verificação de admin para a funcionalidade de listar usuários.
 - Corrigido erro de nome de função ao tentar listar usuários.
+- Adicionada a opção de remover usuario, usuario logado
 
 ## Como Usar
 
