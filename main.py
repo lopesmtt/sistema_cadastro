@@ -25,18 +25,15 @@ usuarios = carregar_usuarios()
 usuario_logado = None
 
 def criar_usuario_admin():
-    for u in usuarios:
-        if u.get('email') == 'admin@admin.com':
-            u['role'] = 'admin'
-            salvar_usuarios(usuarios)
-            return
-    usuarios.append({
-        "nome": "Administrador",
-        "email": "admin@admin.com",
-        "senha": "admin123",
-        "role": "admin"
-    })
-    salvar_usuarios(usuarios)
+    existe_admin = any(u.get('email') == 'admin@admin.com' for u in usuarios)
+    if not existe_admin:
+        usuarios.append({
+            "nome": "Administrador",
+            "email": "admin@admin.com",
+            "senha": "admin123",
+            "role": "admin"
+        })
+        salvar_usuarios(usuarios)
 
 def cadastrar_usuario():
     def cadastro():
@@ -78,6 +75,7 @@ def cadastrar_usuario():
 
 def login_usuario():
     def login():
+        nonlocal login_window
         global usuario_logado
         email = entry_email.get().strip()
         senha = entry_senha.get().strip()
@@ -106,8 +104,8 @@ def login_usuario():
     tk.Button(login_window, text="Login", command=login).pack()
 
 def listar_usuarios():
-    if usuario_logado and usuario_logado["role"] == "admin":
-        lista = "\n".join([f"{u['nome']} - {u['email']}" for u in usuarios])
+    if usuario_logado and usuario_logado.get("role") == "admin":
+        lista = "\n".join([f"{u['nome']} - {u['email']} ({u['role']})" for u in usuarios])
         messagebox.showinfo("Lista de Usuários", lista)
     else:
         messagebox.showerror("Erro", "Você precisa ser um administrador para acessar essa função.")
