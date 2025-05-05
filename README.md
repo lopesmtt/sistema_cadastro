@@ -1,3 +1,4 @@
+
 # Sistema de Cadastro de Usuários
 
 ## Descrição
@@ -36,7 +37,37 @@ Este projeto é um sistema simples de cadastro de usuários utilizando Python e 
 
 - Python 3
 - JSON
+# Sistema de Cadastro de Usuários
 
+Este é um sistema simples de cadastro de usuários utilizando Python e Tkinter para a interface gráfica.
+
+## Funcionalidades
+
+- **Cadastro de novos usuários**: Permite cadastrar usuários com nome, e-mail e senha.
+- **Login**: Os usuários podem fazer login para acessar o sistema.
+- **Alteração de senha**: Permite ao usuário alterar a sua senha após o login.
+- **Edição de dados de usuário**: O usuário pode atualizar seu nome e e-mail.
+- **Exclusão de conta**: Permite ao usuário excluir sua conta após confirmação.
+- **Confirmação de ações**: Algumas ações, como exclusão de conta, exigem confirmação do usuário (Ex: "Deseja realmente excluir sua conta?").
+- **Logs**: O sistema registra eventos importantes, como login e alterações realizadas, com data e hora.
+
+## Como usar
+
+1. Faça o clone ou download do repositório.
+2. Execute o código no seu ambiente Python.
+3. Utilize a interface gráfica para se cadastrar, fazer login ou alterar os dados.
+
+## Requisitos
+
+- Python 3.x
+- Tkinter
+
+## Como executar
+
+Clone o repositório e execute o arquivo principal:
+
+```bash
+python3 main.py
 ## Como Executar
 
 1. Clone o repositório
