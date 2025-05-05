@@ -1,0 +1,5 @@
+[2025-05-02 03:40:08] Login realizado: admin@admin.com
+[2025-05-02 03:40:20] admin@admin.com atualizou seus dados.
+[2025-05-06 00:20:55] Login realizado: admin@admin.com
+[2025-05-06 00:21:07] admin@admin.com atualizou seus dados.
+[2025-05-06 00:21:17] admin@admin.com atualizou seus dados.

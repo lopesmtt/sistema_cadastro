@@ -2,31 +2,49 @@
     {
         "nome": "matheus",
         "email": "matheusllopes22@gmail.com",
-        "senha": "1111"
+        "senha": "1111",
+        "role": "user"
     },
     {
         "nome": "matheus",
         "email": "email@email.com",
-        "senha": "123"
+        "senha": "123",
+        "role": "user"
     },
     {
         "nome": "Matheus",
         "email": "matheus@email.com",
-        "senha": "123"
+        "senha": "123",
+        "role": "user"
     },
     {
         "nome": "Matheus",
         "email": "matheus22@mail.com",
-        "senha": "233"
+        "senha": "233",
+        "role": "user"
     },
     {
         "nome": "Administrador",
         "email": "admin@admin.com",
-        "senha": "admin123"
+        "senha": "admin123",
+        "role": "admin"
     },
     {
         "nome": "Joao",
         "email": "joao@333.com",
-        "senha": "333"
+        "senha": "333",
+        "role": "user"
+    },
+    {
+        "nome": "maria",
+        "email": "maria113@email.com",
+        "senha": "maria123",
+        "role": "user"
+    },
+    {
+        "nome": "Administrador",
+        "email": "admin@admin.com",
+        "senha": "admin123",
+        "role": "admin"
     }
 ]

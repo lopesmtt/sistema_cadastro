@@ -1,0 +1,2 @@
+[2025-05-02 03:43:45] Login realizado por: admin@admin.com
+[2025-05-02 03:44:48] Login: admin@admin.com
